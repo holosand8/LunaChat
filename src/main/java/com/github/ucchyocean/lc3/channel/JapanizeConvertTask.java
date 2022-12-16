@@ -18,6 +18,8 @@ import com.github.ucchyocean.lc3.japanize.JapanizeType;
 import com.github.ucchyocean.lc3.japanize.YukiKanaConverter;
 import com.github.ucchyocean.lc3.member.ChannelMember;
 import com.github.ucchyocean.lc3.util.Utility;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 /**
  * Japanize変換を実行して、実行後に発言を行うタスク
@@ -84,7 +86,8 @@ public class JapanizeConvertTask {
                 keywordMap.put(key, keyword);
             }
         }
-        for ( String dickey : dictionary.keySet() ) {
+        // 文字数の多い単語から順番にロックする
+        for (String dickey : dictionary.keySet().stream().sorted(Comparator.comparing(String::length).reversed()).collect(Collectors.toList())) {
             if ( keywordLocked.contains(dickey) ) {
                 index++;
                 String key = "＜" + makeMultibytesDigit(index) + "＞";
